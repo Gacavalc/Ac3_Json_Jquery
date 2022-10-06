@@ -1,0 +1,61 @@
+<html>
+    <body>
+        <form id="name_form">
+            <label>Nome : </label><input type="text" name="nome"/>
+            <br/>
+            <label>Time : </label><input type="text" name="time"/>
+            <br/>
+            
+            <label>Posições : </label>
+            <select id ="myCombo">
+                <option disabled selected></option>
+                <option value="Defesa direita" >Defesa direita</option>
+                <option value="Saída de rede">Saída de rede</option>
+                <option value="Libero">Libero</option>
+                <option value="Entrada de rede">Entrada de rede</option>
+                <option value="Defesa esquerda">Defesa esquerda</option>
+            </select>
+
+            <input type="submit" value="Enviar" />
+
+        </form>
+         <input type="text" placeholder="Resposta" id="resp" name="resp" />
+        
+        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+        <script type="text/javascript">
+
+        $(document).ready(function(){
+            alert('Carregou'); <!-- aviso que a pagina carregou corretamente -->
+        })    
+
+            $('#name_form').submit(function(e) {
+                    e.preventDefault();
+
+                    var formobj = {
+                       nome: $('[name=nome]').val(),
+                       time:$('[name=time]').val(),
+                       combo: $('#myCombo option:selected').val(),
+                    }
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/jogador',
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify(formobj),
+                        success: function(callback) {
+                            console.log(callback);
+                            $('#resp').val('Dados cadastrados :  ' + callback.nome +'    '+'   Time :  '+ callback.time +'   '+'Posição :  '+ callback.value);
+                            $('[name=nome]').val('');
+                            $('[name=time]').val('');
+                            $('#myCombo').val(1);
+                        },
+                        error: function() {
+                            $(this).html("error!");
+                        }
+                    });
+                });
+        </script>
+    </body>
+</html>
+
